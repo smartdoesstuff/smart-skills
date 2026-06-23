@@ -24,12 +24,11 @@ A phase = one coherent, independently-verifiable change cluster — ideally ≤5
 
 1. **Plan** (Claude, no agy) — fill `templates/plan.md`. Keep the whole plan ≤300 words, bullets not prose. This plan is an ephemeral working doc, not a project artifact — default to a scratch file (e.g. `/tmp/<task-slug>-plan.md`). Only put it in the project's own plan location if that convention is plain Markdown; don't force it into a formal spec/plan system with its own format or required metadata (e.g. HTML templates) — that's for durable, human-reviewed docs, not a throwaway dispatch plan.
 
-2. **Dispatch one phase** — fill `templates/dispatch-task.md` and write it to a scratch path (e.g. `/tmp/phase-N-prompt.md`) before running agy. Point at files by path; never paste file contents into the prompt. Point agy at project instruction files (`CLAUDE.md` etc.) by path too — it reads them itself. Run:
+2. **Dispatch one phase** — write only the body (Context/Task/Out of scope/Verify — `templates/dispatch-task.md` minus its report section) to a scratch file (e.g. `/tmp/phase-N-body.md`). Point at files by path; never paste file contents into the prompt. Point agy at project instruction files (`CLAUDE.md` etc.) by path too — it reads them itself. Run:
    ```bash
-   agy -p "$(cat /tmp/phase-N-prompt.md)" --print-timeout <Xm> > /tmp/agy-phase-N.log
-   awk '/===AGY_REPORT===/,/===END===/' /tmp/agy-phase-N.log
+   bash {base}/scripts/dispatch.sh /tmp/phase-N-body.md <Xm> phase-N
    ```
-   Read only the `awk` output, not the full log. Size `--print-timeout` to the phase (small fix ~3m, multi-file phase 5–10m). If the `awk` output is empty — agy crashed, timed out, or skipped the report — don't guess: check the tail of the log file to see what happened, then either re-dispatch with a sharper reminder of the report contract or treat the phase as blocked.
+   This appends the report-format contract, dispatches to agy, and prints just the extracted report (or the log tail + exit 1 on a missing/empty report — re-dispatch with a sharper reminder or treat as blocked). Size `<Xm>` to the phase (small fix ~3, multi-file phase 5–10). `{base}` = path shown at skill load.
 
    **Never pass `--dangerously-skip-permissions`** — agy already self-approves its own tool calls in `--print` mode, and Claude Code's own permission gate blocks that flag as creating an unsupervised agent loop. It's both unnecessary and will get denied.
 
@@ -44,7 +43,7 @@ A phase = one coherent, independently-verifiable change cluster — ideally ≤5
 | Step | Template | Claude reads |
 |---|---|---|
 | Plan | `templates/plan.md` | — |
-| Dispatch | `templates/dispatch-task.md` | extracted report only |
+| Dispatch | `templates/dispatch-task.md` body + `scripts/dispatch.sh` | extracted report only |
 | Review | `templates/review-output.md` | report + targeted `git diff` |
 | Next phase | `templates/next-phase.md` | prior report's file list only |
 

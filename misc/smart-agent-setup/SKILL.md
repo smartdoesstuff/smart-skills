@@ -40,32 +40,13 @@ Ask each question, wait for answer, then ask the next.
 
 List all files to create. Ask **"Confirm? (yes/no)"** — write nothing until yes.
 
-1. `mkdir -p .claude docs/plans/done docs/specs docs/requirements`
-2. Write `.claude/CLAUDE.md` — read `{base}/templates/CLAUDE.md.template`, fill variables (see template comments)
-3. `ln -sf .claude/CLAUDE.md AGENTS.md` — repeat per chosen target
-4. Copy `{base}/templates/_styles.css` → `docs/plans/_styles.css`
-5. Copy `{base}/templates/_template.html` → `docs/plans/_template.html`
-6. `.gitkeep` in `docs/plans/done/`, `docs/specs/`, `docs/requirements/`
-7. Write service stubs (below)
+Don't generate file contents yourself — write a small vars file from the wizard answers, then run the scaffold script. It copies the static templates, writes symlinks, service stubs, and `.claude/CLAUDE.md` in one shot.
+
+1. Write `/tmp/whs-vars.sh` from `{base}/templates/vars.example.sh` (same shape, filled with wizard answers — `HARD_RULES` is a `$'...\n...'` bullet string, `SERVICES`/`SYMLINKS`/`OMIT` are comma lists, no spaces)
+2. Run: `bash {base}/scripts/scaffold.sh /tmp/whs-vars.sh`
+3. Read script output — it prints each file written/linked/skipped. If it exits 1 (CLAUDE.md already exists), merge missing sections manually instead.
 
 `{base}` = path shown at skill load: `Base directory for this skill: /path/to/skill`
-
-## Service Stub
-
-Write `.claude/{NN}-{service}.md` per service (NN = zero-padded, starting at 01):
-
-```markdown
-# {NN} — {Service Name}
-
-## Overview
-TODO: describe responsibilities.
-
-## Key files
-TODO: list important paths.
-
-## Patterns
-TODO: conventions and anti-patterns.
-```
 
 ## Safety
 

@@ -1,0 +1,11 @@
+NAME="My Project"
+DESC="One sentence description"
+TEAM="Solo dev"                      # "Solo dev" | "Small team" | "Large team"
+HARD_RULES=$'- Rule one\n- Rule two' # bullets, markdown
+SERVICES="backend-api,worker,web"    # comma list, no spaces
+COMMIT="imperative, ≤72 chars"
+MAIN_BRANCH="main"
+INTEG_BRANCH="development"
+RELEASE="PR development → main, auto-tag"
+SYMLINKS="AGENTS.md,GEMINI.md,.cursorrules"   # optional, default shown
+OMIT=""                              # optional comma list: planning,git,instructionfiles

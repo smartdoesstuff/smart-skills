@@ -13,13 +13,4 @@ You are implementing **Phase <N> only** of a larger task in `<repo path>`. Read 
 Run: `<test/typecheck/build command(s)>`
 Fix failures before reporting done. Don't commit.
 
-## Report format (required, exact — end your response with this and nothing after it)
-
-===AGY_REPORT===
-Files changed: <comma-separated paths>
-Decisions: <bullets, only non-obvious choices — "none" if none>
-Blockers: <bullets, or "none">
-Tests: <pass/fail + command run>
-===END===
-
-Keep everything before the report brief. Do not repeat the report content elsewhere in your response.
+<!-- Report-format footer is appended automatically by scripts/dispatch.sh — don't add it here. -->
