@@ -3,7 +3,7 @@
 Usage: ask.py <find|think|draft> <brief-file> <tag> [context files...]
        [--model qwen|deepseek|gemma|<full-id>] [--think|--nothink] [--out PATH] [--force] [--max N] [--dry]
 """
-import argparse, json, os, re, subprocess, sys, time
+import argparse, json, os, re, subprocess, sys, tempfile, time
 from pathlib import Path
 
 URL = "https://api.tokenme.limited/api/v1/chat/completions"
@@ -38,9 +38,9 @@ def read(p):
     except OSError as e: die(f"cannot read {p}: {e.strerror}", 2)
 
 parts = []
-for f in o.files:
+for f in [o.brief] + o.files:
     if SECRET.search(f): die(f"refusing to send secret-looking file to a third party: {f}")
-    parts.append(f"### {f}\n{read(f)}")
+    if f != o.brief: parts.append(f"### {f}\n{read(f)}")
 user = "\n\n".join(parts + ["### Task\n" + read(o.brief)])
 est = len((SYS[o.mode] + user).encode()) // 3  # deliberately high
 
@@ -62,7 +62,9 @@ key = os.environ.get("TOKENME_API_KEY") or (kf.read_text().strip() if kf.exists(
 if not key: die(SETUP, 3)
 
 def call(b):  # curl, not urllib: python fails cert checks on macOS. Key goes via stdin config, body via 0600 file: nothing secret in argv.
-    f = Path(f"/tmp/tkm-{o.tag}.json"); f.touch(mode=0o600); f.write_text(json.dumps(b))
+    fd, name = tempfile.mkstemp(prefix="tkm-", suffix=".json")  # 0600, O_EXCL: no predictable path, no symlink following
+    with os.fdopen(fd, "w") as fh: json.dump(b, fh)
+    f = Path(name)
     cfg = f'header = "Authorization: Bearer {key}"\nheader = "Content-Type: application/json"\n'
     p = subprocess.run(["curl", "-sS", "-m", "300", "-K", "-", "-d", f"@{f}", "-w", "\n%{http_code}", URL], input=cfg, capture_output=True, text=True)
     f.unlink(missing_ok=True)
@@ -84,10 +86,12 @@ for attempt in range(3):
 ch, u = r["choices"][0], r.get("usage", {})
 out = (ch["message"].get("content") or "").strip()
 print(f"[{alias} think={think} in={u.get('prompt_tokens')} cached={u.get('prompt_tokens_details', {}).get('cached_tokens')} out={u.get('completion_tokens')} reasoning={u.get('completion_tokens_details', {}).get('reasoning_tokens')}]", file=sys.stderr)
-if ch.get("finish_reason") == "length": die("TRUNCATED (max_tokens hit, reasoning counts too): raise --max or use --nothink; nothing written.")
+if ch.get("finish_reason") == "length" and (o.mode == "draft" or not out): die("TRUNCATED (max_tokens hit, reasoning counts too): raise --max or use --nothink; nothing written.")
 if not out: die("empty reply")
 if o.mode == "draft":
     out = re.sub(r"\A```[\w+-]*\n|\n```\s*\Z", "", out)
     Path(o.out).parent.mkdir(parents=True, exist_ok=True); Path(o.out).write_text(out + "\n")
     print(f"wrote {o.out} ({out.count(chr(10)) + 1} lines) — unreviewed, verify before use")
-else: print(out[:6000])
+else:
+    print(out[:6000])
+    if ch.get("finish_reason") == "length": print("[TRUNCATED at max_tokens: partial answer above; raise --max for the rest]", file=sys.stderr)

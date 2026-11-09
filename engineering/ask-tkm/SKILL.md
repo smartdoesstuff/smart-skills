@@ -31,6 +31,8 @@ One API call to tokenme. The model cannot run tools or edit files; Claude reads 
 - Prefer `find` + `--nothink` for lookup, inventory, log triage. Use `think` only for judgment, and still verify it.
 - Don't send what Claude already summarized; send paths.
 
+- Audit/compare/"list only mismatches" jobs need judgment: non-thinking `find` rambled and ignored "only" (autopilot run, 2000 tokens wasted). Use `think`, or `find` for one narrow fact per ask. A truncated reply now prints its partial text with a warning.
+
 ## Rules
 - Data leaves the machine. The script refuses `.env*`, keys, credentials; never paste secrets into a brief.
 - Not for security-sensitive code, final decisions, or anything needing this chat's context.

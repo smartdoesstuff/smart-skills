@@ -5,7 +5,7 @@ F="${1:?pdf or image file}"; [[ -f "$F" ]] || { echo "no such file: $F" >&2; exi
 KF="$HOME/.config/tokenme/api-key"; KEY="${TOKENME_API_KEY:-$([[ -f $KF ]] && cat "$KF" || true)}"
 [[ -n "$KEY" ]] || { echo "tokenme key missing: export TOKENME_API_KEY or save it to $KF (chmod 600); ask the user" >&2; exit 3; }
 [[ $(stat -f%z "$F" 2>/dev/null || stat -c%s "$F") -lt 20000000 ]] || { echo "file >20MB: split it first" >&2; exit 2; }
-case "$F" in *[Ee][Nn][Vv]|*.pem|*.key) echo "refusing secret-looking file" >&2; exit 2 ;; esac
+case "$(basename "$F")" in .env*|id_*|*.pem|*.key|*.p12|credentials*) echo "refusing secret-looking file" >&2; exit 2 ;; esac
 B="$(mktemp)"; trap 'rm -f "$B"' EXIT   # body via file, key via stdin config: nothing secret in argv
 { printf '{"model":"paxa/paxa-ocr-lite-v1","document":"'; base64 < "$F" | tr -d '\n'; printf '"}'; } > "$B"
 R="$(printf 'header = "Authorization: Bearer %s"\nheader = "Content-Type: application/json"\n' "$KEY" |
