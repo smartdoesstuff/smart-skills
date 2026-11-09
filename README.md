@@ -11,6 +11,7 @@ Inspired by [9arm-skills](https://github.com/9arm/9arm-skills).
 Skills live under bucket folders:
 
 - `engineering/` — daily code work
+- `management/` — professional communication and management workflows
 - `research/` — research writing and notebook workflows
 - `productivity/` — daily non-code workflow tools
 - `misc/` — kept around but rarely used
@@ -70,6 +71,10 @@ npx skills add LordEaster/smart-skills -g
 ### Research
 
 - **[research-writing-style](./research/research-writing-style/SKILL.md)** — Write or edit research notebooks, reports, and summaries in a natural, Thai-first, non-AI-sounding voice grounded in actual outputs.
+
+### Management
+
+- **[email-writing](./management/email-writing/SKILL.md)** — Co-write and review professional emails with a practical Who–What–When–Why–How checklist, including calendar and attachment consistency.
 
 ### Productivity
 
