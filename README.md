@@ -48,7 +48,7 @@ npx skills add LordEaster/smart-skills -g
 ## Scripts
 
 ```bash
-./scripts/list-skills.sh   # list all shippable skills with descriptions
+./scripts/list-skills.sh   # table of skills, descriptions, and install status per agent
 ./scripts/link-skills.sh   # symlink skills into installed agent dirs
 ```
 
@@ -59,7 +59,9 @@ npx skills add LordEaster/smart-skills -g
 ### Engineering
 
 - **[address-pr-review](./engineering/address-pr-review/SKILL.md)** — Address, respond to, or action bot/AI review comments (Copilot, CodeRabbit, etc.) on a GitHub PR.
-- **[delegate-to-agy](./engineering/delegate-to-agy/SKILL.md)** — Claude plans and reviews, the `agy` CLI implements: phased dispatch via `scripts/dispatch.sh` with a fixed-format report contract to keep both sides' context usage low.
+- **[ask-codex](./engineering/ask-codex/SKILL.md)** — Claude delegates a scoped think/check/do/run job to the Codex CLI and verifies the result; `scripts/ask.sh` caps the reply.
+- **[ask-agy](./engineering/ask-agy/SKILL.md)** — Claude plans and reviews, the `agy` CLI implements in YOLO mode: phased dispatch via `scripts/ask.sh` with a fixed-format report contract to keep both sides' context usage low.
+- **[ask-tkm](./engineering/ask-tkm/SKILL.md)** — cheap text-only offload (find / think / draft) to tokenme-hosted Qwen/DeepSeek via `scripts/ask.py`; prefix-cache friendly, tells the user how to set up the API key when missing.
 - **[finish-feature](./engineering/finish-feature/SKILL.md)** — Ship a completed fix or feature branch to development: detects package manager (bun/pnpm/yarn/npm), runs tests, creates branch, commits, pushes, and opens a PR targeting `development`.
 - **[github-issue-triage-and-fix](./engineering/github-issue-triage-and-fix/SKILL.md)** — Inspect, triage, prioritize, group, or fix open GitHub issues from a repo's backlog.
 
