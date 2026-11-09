@@ -34,4 +34,4 @@ Limits: ≤8 steps, ≤2 retries per step (second failure → try the next helpe
 - Helper output contradicts the code → the code wins; discard the claim.
 
 ## Adding tools
-Drop `tools/<name>.sh` with line 2 = `# tool: <name> — <what> | usage: ... | needs: <bins>`. It must print plain text to stdout, errors to stderr, exit 2 if a dependency is missing, and cap output (`MAX_CHARS`). `list.sh` picks it up; no other edit. Not built yet (add when needed): OCR (tesseract), YouTube transcripts (yt-dlp), xlsx/csv (needs openpyxl or duckdb), GitHub issues/PRs (`gh`), read-only SQL (`sqlite3 -readonly`/`psql`), a chunk+embed vector index for large corpora.
+Drop `tools/<name>.sh` with line 2 = `# tool: <name> — <what> | usage: ... | needs: <bins>`. It must print plain text to stdout, errors to stderr, exit 2 if a dependency is missing, and cap output (`MAX_CHARS`). `list.sh` picks it up; no other edit. Not built yet (add when needed; deps missing on this machine): YouTube transcripts (yt-dlp), xlsx (openpyxl/duckdb), a chunk+embed vector index for corpora too big for `find-files`. `ocr` uploads the file to tokenme: do not OCR anything confidential without asking.
