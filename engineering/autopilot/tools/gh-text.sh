@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tool: gh-text — GitHub issue/PR text with comments, or open issue list | usage: gh-text.sh issue|pr <num> [owner/repo]  |  gh-text.sh list [owner/repo] | needs: gh (logged in)
+# tool: gh-text — GitHub issue/PR text with comments, or open issue list (needs `gh auth login` done) | usage: gh-text.sh issue|pr <num> [owner/repo]  |  gh-text.sh list [owner/repo] | needs: gh
 set -euo pipefail
 command -v gh >/dev/null || { echo "gh missing (brew install gh)" >&2; exit 2; }
 K="${1:?issue|pr|list}"; R=(); 

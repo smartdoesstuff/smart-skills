@@ -64,6 +64,7 @@ npx skills add LordEaster/smart-skills -g
 - **[autopilot](./engineering/autopilot/SKILL.md)** — hands-off orchestrator: plans a goal, routes each step to ask-tkm / ask-codex / ask-agy, pulls sources via a drop-in `tools/` registry (PDF, OCR, docs, web, GitHub, SQL, local search), verifies, and stops only for commits/deletes/risky actions.
 - **[ask-tkm](./engineering/ask-tkm/SKILL.md)** — cheap text-only offload (find / think / draft) to tokenme-hosted Qwen/DeepSeek via `scripts/ask.py`; prefix-cache friendly, tells the user how to set up the API key when missing.
 - **[finish-feature](./engineering/finish-feature/SKILL.md)** — Ship a completed fix or feature branch to development: detects package manager (bun/pnpm/yarn/npm), runs tests, creates branch, commits, pushes, and opens a PR targeting `development`.
+- **[gqm-coach](./engineering/gqm-coach/SKILL.md)** — Facilitate interactive, research-backed GQM sessions: clarify the evaluation goal, derive questions together, and define metrics with linked paper references.
 - **[github-issue-triage-and-fix](./engineering/github-issue-triage-and-fix/SKILL.md)** — Inspect, triage, prioritize, group, or fix open GitHub issues from a repo's backlog.
 
 ### Research
