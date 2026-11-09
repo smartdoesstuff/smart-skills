@@ -62,3 +62,10 @@ When asked to finalize, provide:
 5. **Assumptions and gaps** — what is inferred, what data is missing, and what needs user confirmation.
 
 If details remain unknown, deliver a clearly marked draft instead of filling gaps with guesses.
+
+## Shareable visual output
+
+- When a GQM canvas is ready to report, create a standalone `.html` explainer by default unless the user asks for text-only or another format. Use the user's language and keep it to one page when that is enough to support the decision.
+- Make the measurement path visible with a simple diagram, then map each question to its metric, formula, denominator, boundary, data source, and known limitation.
+- Label existing measures, proposed measures, assumptions, and agreed targets separately. Do not chart invented values or present a plan as benchmark results.
+- Keep citations beside the claims they support. Open the finished page when the user asks for it.
