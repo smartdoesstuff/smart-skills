@@ -33,11 +33,15 @@ o = a.parse_args()
 if o.mode == "draft" and not o.out: die("draft needs --out PATH")
 if o.mode == "draft" and Path(o.out).exists() and not o.force: die(f"{o.out} exists; pass --force to overwrite")
 
+def read(p):
+    try: return Path(p).read_text(errors="replace")
+    except OSError as e: die(f"cannot read {p}: {e.strerror}", 2)
+
 parts = []
 for f in o.files:
     if SECRET.search(f): die(f"refusing to send secret-looking file to a third party: {f}")
-    parts.append(f"### {f}\n{Path(f).read_text(errors='replace')}")
-user = "\n\n".join(parts + ["### Task\n" + Path(o.brief).read_text()])
+    parts.append(f"### {f}\n{read(f)}")
+user = "\n\n".join(parts + ["### Task\n" + read(o.brief)])
 est = len((SYS[o.mode] + user).encode()) // 3  # deliberately high
 
 alias = o.model or ("deepseek" if est > 200_000 else "qwen")  # qwen/gemma ctx is 262k

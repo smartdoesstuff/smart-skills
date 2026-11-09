@@ -19,7 +19,7 @@ Pick the helper: text-only lookup/draft → `ask-tkm` (cheapest) · second opini
 6. agy never commits; Claude commits under the project's git rules.
 
 ## Models
-Default `gemini-3.8-flash-medium`; `AGY_KIND=vision|complex` → `gemini-4-argon-high`; `AGY_MODEL=<id>` overrides (`agy models`). `AGY_EFFORT=low` for inventories, `high` for design-sensitive work. One retry on `gemini-4-argon-medium` on quota errors. Never pick a Claude model (not usable on this account). Out of credits (exit 2) → `ask-codex` do mode.
+Default `gemini-3.8-flash-medium`; `AGY_KIND=vision|complex` → `gemini-4-argon-high`; `AGY_MODEL=<id>` overrides (`agy models`). `AGY_EFFORT=low|medium|high` swaps the model's effort suffix: low for inventories, high for design-sensitive work. One retry on `gemini-4-argon-medium` on quota errors. Never pick a Claude model (not usable on this account). Out of credits (exit 2) → `ask-codex` do mode.
 
 ## Gotchas
 - Worded as attacks/audits ("vulnerability audit") it may refuse: say "code review for correctness and missing authorization checks".

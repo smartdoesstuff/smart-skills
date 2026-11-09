@@ -3,7 +3,7 @@
 # Appends the working rules + report contract to the body, runs agy headless, prints ONLY the report.
 # Env: AGY_KIND=default|vision|complex picks the model (default gemini-3.8-flash-medium; vision gemini-4-argon-high; complex gemini-4-argon-high).
 #      AGY_MODEL=<id> overrides AGY_KIND. On a quota/limit error the run is retried once on gemini-4-argon-medium.
-#      AGY_EFFORT=low|medium|high|xhigh|max (optional).
+#      AGY_EFFORT=low|medium|high swaps the model id's effort suffix.
 # agy writes its report to /tmp/agy-<tag>-report.md (created early, so a timeout still leaves partial results).
 set -euo pipefail
 BODY="${1:?task body file}"; T="${2:?timeout minutes}"; TAG="${3:?tag}"; WD="${4:-$PWD}"
@@ -28,9 +28,10 @@ case "${AGY_KIND:-default}" in
   *) KIND_MODEL=gemini-3.8-flash-medium ;;
 esac
 MODEL="${AGY_MODEL:-$KIND_MODEL}"; FALLBACK=gemini-4-argon-medium
+# effort lives in the model id (-low|-medium|-high); agy rejects --effort together with such an id
+case "${AGY_EFFORT:-}" in low|medium|high) MODEL="${MODEL%-*}-$AGY_EFFORT" ;; esac
 run_agy() {  # $1 = model id
   ARGS=(-p "$(cat "$PROMPT")" --print-timeout "${T}m" --dangerously-skip-permissions --model "$1")  # user-approved: headless agy cannot prompt
-  [[ -n "${AGY_EFFORT:-}" ]] && ARGS+=(--effort "$AGY_EFFORT")
   ( cd "$WD" && agy "${ARGS[@]}" > "$LOG" 2>&1 ) || true
 }
 run_agy "$MODEL"
