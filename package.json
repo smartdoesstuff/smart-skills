@@ -1,0 +1,26 @@
+{
+  "name": "@smartdoesstuff/smart-skills",
+  "version": "1.0.0",
+  "description": "Reusable skills for coding agents, packaged for npm-based project installs.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartdoesstuff/smart-skills.git"
+  },
+  "homepage": "https://github.com/smartdoesstuff/smart-skills#readme",
+  "bugs": {
+    "url": "https://github.com/smartdoesstuff/smart-skills/issues"
+  },
+  "files": [
+    "dist/skills"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "agent-skills",
+    "claude",
+    "codex",
+    "gemini",
+    "antigravity"
+  ]
+}

@@ -40,8 +40,19 @@ Re-run this whenever you add or rename a skill.
 Install globally across all agents (Claude Code, Codex, Antigravity, Gemini CLI, GitHub Copilot, etc.) with the [skills CLI](https://skills.sh/):
 
 ```bash
-npx skills add LordEaster/smart-skills -g
+npx skills add smartdoesstuff/smart-skills -g
 ```
+
+### Via npm (project-level)
+
+Install the skill pack as a project dependency, then sync its skills into the selected agents:
+
+```bash
+npm install --save-dev @smartdoesstuff/smart-skills
+npx skills experimental_sync -y
+```
+
+The npm sync command is experimental and installs project-level skills. For global installation across projects, use the GitHub command above.
 
 
 ---
@@ -52,6 +63,23 @@ npx skills add LordEaster/smart-skills -g
 ./scripts/list-skills.sh   # table of skills, descriptions, and install status per agent
 ./scripts/link-skills.sh   # symlink skills into installed agent dirs
 ```
+
+## npm publishing
+
+The public package `@smartdoesstuff/smart-skills` contains each shippable skill directory under `dist/skills/`. Build and inspect it with:
+
+```bash
+node scripts/build-npm-package.mjs
+npm pack --dry-run
+```
+
+After the first public release (`npm publish --access public`), configure npm Trusted Publishing for GitHub user `smartdoesstuff`, repository `smart-skills`, and workflow `publish-npm.yml`:
+
+```bash
+npm trust github @smartdoesstuff/smart-skills --file publish-npm.yml --repo smartdoesstuff/smart-skills --allow-publish
+```
+
+The workflow uses OIDC, publishes a new `1.0.x` version when skills change on `main`, and skips a version already published. npm requires an authenticated account with two-factor authentication enabled to publish and configure trusted publishing.
 
 ---
 
