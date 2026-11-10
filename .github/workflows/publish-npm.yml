@@ -1,0 +1,52 @@
+name: Publish skills to npm
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/SKILL.md'
+      - 'engineering/**'
+      - 'management/**'
+      - 'misc/**'
+      - 'productivity/**'
+      - 'research/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-npm
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Ensure npm supports trusted publishing
+        run: npm install --global 'npm@^11.15.0'
+      - name: Set unique package version
+        run: npm pkg set "version=1.0.${GITHUB_RUN_NUMBER}"
+      - name: Build skill pack
+        run: node scripts/build-npm-package.mjs
+      - name: Validate package contents
+        run: npm pack --dry-run
+      - name: Skip an already published version
+        id: published
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if npm view "@smartdoesstuff/smart-skills@${version}" version >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish public package
+        if: steps.published.outputs.exists != 'true'
+        run: npm publish --access public
